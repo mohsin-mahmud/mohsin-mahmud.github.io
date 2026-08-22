@@ -82,11 +82,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // ================= 3. THEME TOGGLE =================
   const themeToggles = document.querySelectorAll('.theme-toggle');
   
-  // Check for saved theme preference or use system preference
+  // Check for saved theme preference
   const savedTheme = localStorage.getItem('theme');
-  const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
   
-  if (savedTheme === 'light' || (!savedTheme && systemPrefersLight)) {
+  // Default to dark mode unless the user explicitly saved 'light' previously
+  if (savedTheme === 'light') {
     document.documentElement.setAttribute('data-theme', 'light');
   } else {
     document.documentElement.setAttribute('data-theme', 'dark');
@@ -100,4 +100,3 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem('theme', newTheme);
     });
   });
-});
