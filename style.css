@@ -127,10 +127,9 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ================= LAYOUT ================= */
-/* ================= LAYOUT ================= */
 .portfolio-layout { 
   max-width: 1450px; margin: 0 auto; display: grid; 
-  grid-template-columns: minmax(0, 1fr) 220px; gap: 100px; 
+  grid-template-columns: minmax(0, 1fr) 220px; gap: 90px; 
   align-items: start; position: relative; z-index: 1; 
   padding-top: 100px; /* Offset for the fixed topbar */
 }
