@@ -1,8 +1,8 @@
 # Mohsin Mahmud Topu — Academic Portfolio
 
-[![GitHub Pages](https://img.shields.io/badge/Live%20Site-GitHub%20Pages-0891b2?style=for-the-badge&logo=github)](https://mohsin-mahmud.github.io/portfolio/)
+[![GitHub Pages](https://img.shields.io/badge/Live%20Site-GitHub%20Pages-0891b2?style=for-the-badge&logo=github)](https://mohsinmahmud.github.io/)
 
-A responsive academic portfolio website showcasing my research, publications, and professional experience in **Intelligent Transportation Systems**, **Sustainable Infrastructure**, and **Human-Centric AI**.
+A responsive academic portfolio website showcasing my research, publications, and professional experience in **Intelligent Transportation Systems** and **Sustainable Infrastructure**.
 
 ---
 
