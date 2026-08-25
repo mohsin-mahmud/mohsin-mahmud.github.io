@@ -101,3 +101,73 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+// ================= 4. GALLERY SLIDER (SLIDE IMAGES + FADE TEXT) =================
+  const sliderContainer = document.querySelector('.gallery-slider');
+  
+  if (sliderContainer) {
+    const slides = document.querySelectorAll('.slide');
+    const dotsContainer = document.querySelector('.slider-dots');
+    const globalCaption = document.getElementById('global-caption');
+    let currentSlide = 0;
+    let slideInterval;
+
+    // Auto-generate navigation dots
+    slides.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      if (i === 0) dot.classList.add('active');
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation(); 
+        goToSlide(i);
+      });
+      dotsContainer.appendChild(dot);
+    });
+    const dots = document.querySelectorAll('.dot');
+
+    function goToSlide(n) {
+      if (currentSlide === n) return; 
+
+      // 1. Start fading out the text immediately
+      if (globalCaption) {
+        globalCaption.classList.add('fade-out');
+      }
+
+      // 2. Handle the Image Slide Animation
+      slides.forEach(s => s.classList.remove('sliding-out'));
+      
+      const oldSlide = slides[currentSlide];
+      oldSlide.classList.remove('active');
+      oldSlide.classList.add('sliding-out');
+      dots[currentSlide].classList.remove('active');
+
+      currentSlide = (n + slides.length) % slides.length;
+      const newSlide = slides[currentSlide];
+      
+      void newSlide.offsetWidth; // Force browser reflow
+      
+      newSlide.classList.add('active');
+      dots[currentSlide].classList.add('active');
+      
+      // 3. Swap the text and fade it back in after 400ms (halfway through the slide)
+      setTimeout(() => {
+        if (globalCaption) {
+          globalCaption.innerHTML = newSlide.getAttribute('data-caption');
+          globalCaption.classList.remove('fade-out');
+        }
+      }, 400); 
+
+      resetInterval();
+    }
+
+    function resetInterval() {
+      clearInterval(slideInterval);
+      slideInterval = setInterval(() => goToSlide(currentSlide + 1), 5000);
+    }
+
+    sliderContainer.addEventListener('click', () => {
+      goToSlide(currentSlide + 1);
+    });
+
+    resetInterval(); 
+  }
