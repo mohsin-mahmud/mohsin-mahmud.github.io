@@ -1,6 +1,4 @@
-/* Single consolidated font import (the old file loaded Inter/Source Serif
-   twice via two overlapping @import lines — that's a duplicate network
-   request on every page load). Geist is added here too. */
+/* Single consolidated font import */
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@300;400;500;600;700;800;900&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap');
 
 /* CSS Reset to eliminate white borders completely */
@@ -12,29 +10,15 @@ html, body {
   background-color: var(--bg-dark);
   color: var(--text-main);
   scroll-behavior: smooth !important;
-  /* overflow-x: clip fixes horizontal scrolling without breaking position: sticky */
   overflow-x: clip;
   scrollbar-gutter: stable;
 }
 
-/* overflow-y:scroll is a FIXED, NEVER-TOGGLED value on <html>. This forces
-   the vertical scrollbar track to occupy the same width at all times —
-   during the intro lock and on the main page. scrollbar-gutter:stable only
-   holds the gutter steady while overflow stays auto/scroll; the old code
-   flipped overflow to hidden during the lock and back to auto on dismiss,
-   and THAT flip is what made the browser recompute scrollbar width and
-   shake the whole page. Now overflow-y never changes, so there is nothing
-   to recompute. */
 html {
   overflow-y: scroll;
 }
 
-/* Applied to <html> and <body> only while the intro splash is showing.
-   Locks page scroll WITHOUT touching overflow (see above). Instead, body
-   is taken out of normal flow with position:fixed at the top — since we
-   already force scrollY to 0 before this runs, pinning it here is visually
-   identical to where it already was, so nothing jumps. Removed by
-   script.js once the intro is dismissed, restoring normal scrolling. */
+
 html.intro-scroll-lock {
   overscroll-behavior: none;
 }
@@ -59,14 +43,14 @@ body.intro-scroll-lock {
 }
 
 [data-theme="light"] {
-  --bg-dark: #f0f4f8; /* Soft off-white */
+  --bg-dark: #f0f4f8;
   --text-main: #0f172a;
   --text-muted: #334155;
   --surface: rgba(255, 255, 255, 0.7);
   --surface-hover: rgba(255, 255, 255, 0.95);
   --border-glass: rgba(0, 0, 0, 0.08);
-  --cyan: #0891b2; /* Darker cyan for contrast */
-  --teal: #0369a1; /* Darker teal */
+  --cyan: #0891b2; 
+  --teal: #0369a1;
   --cyan-dim: rgba(8, 145, 178, 0.1);
 }
 
@@ -76,14 +60,13 @@ body.intro-scroll-lock {
   background-color: var(--bg-dark);
   color: var(--text-main);
   position: relative;
-  /* Top padding ensures content starts below the fixed header */
   padding: 0 4% 0;
 }
 
 a { text-decoration: none; color: inherit; }
 .clearfix::after { content: ""; clear: both; display: table; }
 
-/* Background Elements - Wrapped safely to avoid layout break */
+/* Background Elements */
 .orb-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; pointer-events: none; }
 .ambient-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; animation: float-orb 10s infinite alternate ease-in-out; }
 .orb-cyan { width: 400px; height: 400px; background: var(--cyan); top: -50px; left: -50px; }
@@ -163,7 +146,7 @@ a { text-decoration: none; color: inherit; }
   max-width: 1350px; margin: 0 auto; display: grid; 
   grid-template-columns: minmax(0, 1fr) 220px; gap: 40px; 
   align-items: start; position: relative; z-index: 1; 
-  padding-top: 100px; /* Offset for the fixed topbar */
+  padding-top: 100px;
 }
 .portfolio-main { min-width: 0; }
 .content-section { margin-bottom: 90px; scroll-margin-top: 100px; }
@@ -213,7 +196,6 @@ a { text-decoration: none; color: inherit; }
   width: 250px;
   height: 250px;
   margin: 0 0 20px 40px;
-  /* This creates a circular text wrap effect */
   shape-outside: circle(50%);
   border-radius: 50%;
 }
@@ -257,14 +239,14 @@ a { text-decoration: none; color: inherit; }
 /* ================= 3. NEWS ================= */
 .news-container { padding: 25px 35px; }
 
-/* UPDATED: Scrollable News List */
+/* Scrollable News List */
 .news-list { 
   list-style: none; 
   padding: 0; 
   margin: 0; 
-  max-height: 380px; /* Height set to show approx. 5 items */
-  overflow-y: auto;  /* Enables vertical scrolling */
-  padding-right: 15px; /* Adds breathing room between text and the scrollbar */
+  max-height: 380px; 
+  overflow-y: auto;  
+  padding-right: 15px;
 }
 
 /* Custom Scrollbar specifically for the News section */
@@ -295,10 +277,10 @@ a { text-decoration: none; color: inherit; }
 .pub-row { display: flex; gap: 35px; padding-bottom: 40px; border-bottom: 1px solid var(--border-glass); transition: transform 0.2s; }
 .pub-row:last-child { border-bottom: none; padding-bottom: 0; }
 
-/* UPDATED: Figure box centered vertically and widened for maximum zoom */
+
 .pub-figure { 
-  flex: 0 0 420px; /* Increased from 320px to make the image much larger */
-  align-self: center; /* Aligns the image to the middle of the adjacent text */
+  flex: 0 0 420px;
+  align-self: center;
   border-radius: 8px; 
   overflow: hidden; 
   border: 1px solid var(--border-glass); 
@@ -309,7 +291,7 @@ a { text-decoration: none; color: inherit; }
   width: 100%; 
   height: auto; 
   display: block; 
-  object-fit: contain; /* Guarantees the image scales up without losing any edges */
+  object-fit: contain;
 }
 .pro-placeholder { width: 100%; height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.02); }
 .pro-placeholder svg { color: rgba(0, 242, 254, 0.4); }
@@ -340,7 +322,6 @@ a { text-decoration: none; color: inherit; }
 .tl-head, .edu-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
 .tl-head h3, .edu-head h3 { font-family: 'Source Serif 4', serif; font-size: 19px; margin: 0; color: var(--text-main); }
 .tl-date, .edu-year { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
-/* Increased font size from 14px to 15px */
 .tl-org, .edu-org { font-size: 15px; font-weight: 600; color: var(--teal); margin: 0 0 10px; }
 
 /* Icon formatting and hover animation */
@@ -352,7 +333,7 @@ a { text-decoration: none; color: inherit; }
 .edu-right { text-align: right; display: flex; flex-direction: column; gap: 5px; }
 .edu-score { font-size: 13px; font-weight: 600; color: var(--cyan); }
 .edu-thesis { font-size: 14px; color: var(--text-muted); background: var(--cyan-dim); padding: 12px 15px; border-radius: 6px; border-left: 2px solid var(--teal); line-height: 1.5; margin-top: 10px;}
-/* UPDATED: Supervisor and Thesis styling inside Education */
+/* Supervisor and Thesis styling inside Education */
 .supervisors-info { 
   margin-bottom: 8px; 
   display: flex; 
@@ -436,7 +417,7 @@ a { text-decoration: none; color: inherit; }
   display: flex; 
   flex-direction: column; 
   gap: 20px; 
-  transform: translateX(80px); /* This slides the entire sidebar and theme button 80px to the right */
+  transform: translateX(80px);
 }
 .nav-inner { background: var(--surface); border: 1px solid var(--border-glass); border-radius: 12px; padding: 24px 20px; }
 .nav-title { color: var(--cyan); font-size: 12px; font-weight: 800; letter-spacing: 1.5px; margin-bottom: 20px; padding-left: 10px; }
@@ -476,8 +457,8 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
   .pub-row { flex-direction: column; gap: 20px; }
   .pub-figure { 
     flex: auto; 
-    max-height: none; /* Removes the height limit causing the cutoff */
-    width: 100%;      /* Ensures it takes the full width of the mobile screen */
+    max-height: none; 
+    width: 100%;     
   }
   .tl-head, .edu-head { flex-direction: column; gap: 5px; }
   .edu-right { text-align: left; flex-direction: row; gap: 10px; }
@@ -497,10 +478,10 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
 .gallery-slider {
   position: relative;
   width: 100%;
-  height: 750px; /* Made even bigger for maximum visual impact */
+  height: 750px; 
   cursor: pointer; 
   background: transparent; 
-  overflow: hidden; /* Ensures sliding images don't break page width */
+  overflow: hidden; 
 }
 
 .slide {
@@ -508,22 +489,21 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
   top: 0; left: 0;
   width: 100%; height: 100%;
   opacity: 0;
-  transform: translateX(100%); /* Start completely off-screen to the right */
-  /* Combines opacity fade with physical sliding */
+  transform: translateX(100%); 
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
   display: flex;
   align-items: center; 
   justify-content: center; 
 }
 
-/* The active image in the center */
+
 .slide.active {
   transform: translateX(0);
   opacity: 1;
   z-index: 2;
 }
 
-/* The old image sliding out to the left */
+
 .slide.sliding-out {
   transform: translateX(-100%);
   opacity: 0;
@@ -534,10 +514,9 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
   width: 100%;
   height: 100%;
   object-fit: contain; 
-  border-radius: 0; /* Removed hard rounded edges */
-  box-shadow: none; /* Removed box outline */
+  border-radius: 0; 
+  box-shadow: none;
   
-  /* Creates the faded edge/vignette effect directly on the image */
   -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
   mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
 }
@@ -562,14 +541,14 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
   
-  /* NEW: Keeps it above the sliding images and handles the fade */
+
   z-index: 5; 
   opacity: 1;
   transition: opacity 0.4s ease; 
-  pointer-events: none; /* Allows clicking through the text to trigger the slide */
+  pointer-events: none; 
 }
 
-/* NEW: The class JS will add to trigger the fade out */
+
 .slide-caption.fade-out {
   opacity: 0;
 }
@@ -614,10 +593,6 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
 }
 
 /* ================= CINEMATIC INTRO SPLASH ================= */
-/* NOTE: the old @font-face pointed at a hand-typed gstatic hash that doesn't
-   match Google's real Geist file, so the browser silently fell back to
-   sans-serif. Loading it the same way Inter/Source Serif are loaded above
-   (official Google Fonts CSS2 endpoint) is what actually renders true Geist. */
 
 .intro-splash {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
@@ -640,8 +615,7 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
 /* Landing Content Background */
 .intro-landing-content { position: absolute; inset: 0; background-color: var(--bg-dark); z-index: 50; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 
-/* Theme Toggle — pinned to a fixed corner (was "right: 4%", which drifted
-   closer to the vertical text as the viewport narrowed and caused overlap) */
+/* Theme Toggle */
 .intro-theme-toggle { position: absolute; top: 24px; right: 24px; z-index: 200; border-radius: 50%; }
 
 /* --- Fixed Vertical Text Container --- */
@@ -649,14 +623,12 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
 .vertical-text {
   position: absolute; top: 50%;
   font-family: 'Geist', sans-serif !important;
-  font-size: clamp(2rem, 5vh, 4rem); /* Mathematically guarantees it fits vertically */
+  font-size: clamp(2rem, 5vh, 4rem);
   font-weight: 900; color: var(--text-main); opacity: 0.04;
   white-space: nowrap; text-transform: uppercase;
   writing-mode: vertical-rl; letter-spacing: 0.05em;
 }
-/* Both strips share one inset variable so they always sit at the SAME margin
-   from their edge, and now start well clear of the 36px theme-toggle button
-   (24px + 36px = 60px footprint, so 72px+ leaves a clean gap). */
+
 .left-text { left: clamp(72px, 7vw, 110px); transform: translateY(-50%) rotate(180deg); }
 .right-text { right: clamp(72px, 7vw, 110px); transform: translateY(-50%); }
 
@@ -668,13 +640,13 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
 .hello-dashes { position: absolute; top: -16px; right: -12px; z-index: 3; }
 .hello-badge { position: relative; background: #111; color: #fff; font-family: 'Geist', sans-serif; font-weight: 600; padding: 8px 24px; border-radius: 30px; z-index: 2; font-size: 14px; letter-spacing: 0.05em; }
 
-/* Exact Font Matching the Image */
-.intro-main-title { font-family: 'Geist', sans-serif !important; font-size: clamp(2.5rem, 6vw, 5.5rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.02em; margin: 0; color: var(--text-main); }
+/* Font */
+.intro-main-title { font-family: 'Geist', sans-serif !important; font-size: clamp(2.5rem, 6vw, 5.5rem); font-weight: 900; line-height: 1.35; letter-spacing: -0.02em; margin: 0; color: var(--text-main); }
 
 /* Middle Grid */
 .intro-middle-grid { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 30px; width: 100%; }
 
-/* Quote - Updated to Cyan */
+/* Quote */
 .intro-quote-box { max-width: 320px; padding-left: 10%; }
 .quote-icon { font-family: 'Geist', sans-serif !important; font-size: 3.5rem; color: var(--cyan); line-height: 0; margin-top: 20px; margin-bottom: 10px; font-weight: 900; }
 .quote-text { font-family: 'Inter', sans-serif; font-size: 19px; line-height: 1.6; color: var(--text-muted); font-weight: 400; }
@@ -696,40 +668,11 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
   width: 100%;
   height: 100%;
   object-fit: cover;
-
-  /*
-   * Remove the circular crop.
-   * The portrait is now displayed naturally.
-   */
   border-radius: 0;
-
   z-index: 3;
-
-  /*
-   * Keep the portrait visually integrated with
-   * the cinematic landing background.
-   */
   filter: drop-shadow(0 18px 35px rgba(0, 0, 0, 0.32));
-
-  /*
-   * Remove the artificial circular outline.
-   */
   border: none;
 
-  /*
-   * The portrait dissolves into the landing background on EVERY edge,
-   * not just the bottom. A straight top-to-bottom linear mask still
-   * leaves the image's hard left/right/top rectangle edges visible on
-   * top of the organic (non-rectangular) cyan-bg-shape blob behind it,
-   * which is what read as a "square box" around the photo.
-   *
-   * An elliptical radial mask fades all four sides at once. It's
-   * centered a little above the middle (40% down) and shaped taller
-   * than it is wide, so the face/torso in the upper portion stays
-   * fully visible while the shoulders/edges soften away — same visual
-   * intent as before, just no longer leaving straight hard edges.
-   * The cyan-bg-shape blob itself is untouched.
-   */
   -webkit-mask-image: radial-gradient(
     ellipse 68% 80% at 50% 40%,
     rgba(0, 0, 0, 1) 0%,
@@ -757,11 +700,6 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
 
 .cyan-bg-shape {
   position: absolute;
-
-  /*
-   * Slightly larger than the portrait so the glow
-   * naturally surrounds the image.
-   */
   width: 110%;
   height: 110%;
 
@@ -772,28 +710,12 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
   );
 
   z-index: 1;
-
-  /*
-   * Keep the shape luminous and subtle.
-   * This is intentionally NOT a solid opaque blob.
-   */
   opacity: 0.6;
-
-  /*
-   * This is the key to the soft blue-energy appearance.
-   */
   filter: blur(15px);
-
-  /*
-   * Organic transformation + continuous rotation.
-   */
   animation:
     morphBlob 8s ease-in-out infinite,
     rotateBlob 15s linear infinite;
 
-  /*
-   * Prevent the animation from looking mechanical.
-   */
   transform-origin: center center;
 
   will-change: transform, border-radius;
@@ -832,16 +754,12 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
   }
 }
 
-/* Action Button - Updated to match website theme */
+/* Action Button */
 .intro-actions { display: flex; justify-content: flex-end; padding-right: 10%; }
 .intro-action-btn { background: var(--cyan); color: var(--bg-dark); border: none; padding: 0 28px; height: 50px; border-radius: 30px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; transition: transform 0.3s ease, box-shadow 0.3s ease; font-family: 'Geist', sans-serif !important; font-weight: 700; font-size: 15px; }
 .intro-action-btn:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0, 242, 254, 0.4); }
 
-/* "Closing credits" hover: the mask (.btn-text-window) shows exactly one
-   line; .btn-text-track holds two stacked copies of the label. On hover
-   the track slides up by one line-height, so the first copy exits upward
-   and the second copy scrolls in from below — the actual credits effect,
-   not a fade. */
+/* "Closing credits" hover */
 .btn-text-window {
   display: inline-block;
   overflow: hidden;
@@ -871,15 +789,13 @@ footer { display: flex; justify-content: space-between; max-width: 1350px; margi
 }
 
 @media (max-width: 768px), (max-height: 800px) {
-  .vertical-texts-container { display: none; } /* Kept off on tiny screens to prevent chaos */
+  .vertical-texts-container { display: none; } 
   .intro-main-title { font-size: clamp(2rem, 8vw, 2.8rem); }
   .intro-header { margin-bottom: 10px; }
-  .intro-middle-grid { gap: 25px; } /* Ensures spacing doesn't cause overlapping */
-  
-  /* Pushes quote and button well away from image on mobile */
+  .intro-middle-grid { gap: 25px; } 
   .intro-quote-box { margin-bottom: 10px; } 
   .quote-icon { font-size: 2.5rem; margin-bottom: 5px; }
-  .quote-text { line-height: 1.4; br { display: none; } } /* Removes linebreaks on mobile text to fit better */
+  .quote-text { line-height: 1.4; br { display: none; } }
   
   .intro-image-wrapper { width: min(25vh, 220px); height: min(25vh, 220px); }
 }
