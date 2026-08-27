@@ -427,7 +427,17 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ================= DESKTOP STICKY SIDE NAVIGATION (Exact Match) ================= */
-.sticky-nav-wrapper { position: -webkit-sticky; position: sticky; top: 100px; align-self: start; height: max-content; display: flex; flex-direction: column; gap: 20px; }
+.sticky-nav-wrapper { 
+  position: -webkit-sticky; 
+  position: sticky; 
+  top: 100px; 
+  align-self: start; 
+  height: max-content; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 20px; 
+  transform: translateX(80px); /* This slides the entire sidebar and theme button 80px to the right */
+}
 .nav-inner { background: var(--surface); border: 1px solid var(--border-glass); border-radius: 12px; padding: 24px 20px; }
 .nav-title { color: var(--cyan); font-size: 12px; font-weight: 800; letter-spacing: 1.5px; margin-bottom: 20px; padding-left: 10px; }
 .side-nav-menu { border-left: 1px solid var(--border-glass); margin-left: 10px; display: flex; flex-direction: column; position: relative; }
