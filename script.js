@@ -169,6 +169,13 @@ document.addEventListener("DOMContentLoaded", () => {
     function goToSlide(n) {
       if (currentSlide === n) return; 
 
+      // Determine if we are moving backward
+      if (n < currentSlide) {
+        sliderContainer.classList.add('reverse-anim');
+      } else {
+        sliderContainer.classList.remove('reverse-anim');
+      }
+
       // 1. Start fading out the text immediately
       if (globalCaption) {
         globalCaption.classList.add('fade-out');
