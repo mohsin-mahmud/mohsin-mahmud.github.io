@@ -237,8 +237,21 @@ document.addEventListener("DOMContentLoaded", () => {
       slideInterval = setInterval(() => goToSlide(currentSlide + 1), 5000);
     }
 
-    sliderContainer.addEventListener('click', () => {
-      goToSlide(currentSlide + 1);
+    sliderContainer.addEventListener('click', (e) => {
+      // Get the dimensions and position of the slider container
+      const rect = sliderContainer.getBoundingClientRect();
+      
+      // Calculate the X coordinate of the click relative to the container
+      const clickX = e.clientX - rect.left;
+      
+      // If the click is on the left half of the container, go back
+      if (clickX < rect.width / 2) {
+        goToSlide(currentSlide - 1);
+      } 
+      // Otherwise (clicked on the right half), go forward
+      else {
+        goToSlide(currentSlide + 1);
+      }
     });
 
     resetInterval(); 
