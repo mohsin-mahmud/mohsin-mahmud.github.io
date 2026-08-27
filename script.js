@@ -1,4 +1,68 @@
+// ================= FIX: STOP THE BROWSER FROM RESTORING OLD SCROLL POSITION =================
+// This is the actual root cause of "sidebar shows Honors, then jumps back to
+// Profile" on load/refresh. Browsers remember how far down the page you were
+// scrolled and silently restore that position — sometimes *after* our own
+// DOMContentLoaded code has already run, especially on a heavy page like this
+// one with a video background and several images still loading. That restore
+// happens to land on whatever section (e.g. Honors) you'd previously scrolled
+// to, the sidebar highlights it, and only then does our own top-scroll logic
+// correct it — which is the visible "stays at Honors, then snaps to Profile"
+// glitch. Telling the browser to leave scroll restoration to us, and forcing
+// position 0 as early as possible (before DOMContentLoaded even fires),
+// closes that gap.
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
 document.addEventListener("DOMContentLoaded", () => {
+
+  // ================= 0. CINEMATIC INTRO SPLASH SCREEN =================
+  const introSplash = document.getElementById("intro-splash");
+  const enterBtn = document.getElementById("enter-site-btn");
+
+  if (introSplash && enterBtn) {
+    // 1. Lock scroll instantly so the user stays trapped in the intro.
+    // The old version only locked <body>. Because the splash sits on top as a
+    // position:fixed OVERLAY (a sibling of #main-portfolio, not its parent),
+    // a mouse-wheel/touch scroll over the splash still bubbles up to the
+    // document and scrolls the page underneath — the splash just doesn't
+    // visually move (it's fixed), so you don't notice until you dismiss it
+    // and land mid-page. Locking BOTH <html> and <body> together closes that
+    // gap reliably across browsers (including mobile Safari, which often
+    // ignores a body-only lock).
+    document.documentElement.classList.add("intro-scroll-lock");
+    document.body.classList.add("intro-scroll-lock");
+    // behavior: 'instant' overrides the page's global `scroll-behavior: smooth`
+    // so this snap to the top is never a visible animated scroll.
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
+    // 2. Trigger the split doors (0.7s after load)
+    setTimeout(() => {
+      introSplash.classList.add("open");
+    }, 700);
+
+    // 3. When button is clicked, slide intro away
+    enterBtn.addEventListener("click", () => {
+      introSplash.classList.add("dismissed");
+      
+      // Unlock scroll 1 second later (when slide animation is fully finished)
+      setTimeout(() => {
+        // Removes the JS lock so your CSS "overflow-x: clip" takes over again, fixing the sticky sidebar!
+        document.documentElement.classList.remove("intro-scroll-lock");
+        document.body.classList.remove("intro-scroll-lock");
+        // Belt-and-braces: force the reveal to start at the very top of the
+        // main site, even if any scroll ever slipped through during the intro.
+        // Instant (not smooth) so there's no visible animated jump.
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        // The scrollspy only re-runs on a 'scroll' event, but if we were
+        // already at position 0 the line above won't fire one — so the
+        // sidebar highlight could stay stuck on whatever section it last
+        // calculated during the lock. Sync it directly, right now.
+        updateActiveSection();
+      }, 1000); 
+    });
+  }
   
   // ================= 1. MOBILE MENU LOGIC (Matches original script.js) =================
   const menuBtn = document.querySelector('.menu-toggle');
@@ -33,6 +97,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateActiveSection() {
     if (!sectionEls.length || !sideLinks.length) return;
+
+    // While the intro lock is on, html/body are height:100%+overflow:hidden,
+    // so the body's overflow no longer propagates to the document —
+    // document.documentElement.scrollHeight temporarily collapses to ~one
+    // viewport tall. That makes "nearBottom" below always true, which
+    // force-picks the LAST section (Honors) as active. This is the actual
+    // cause of the Honors-then-Profile flash. Skip until layout is real.
+    if (document.documentElement.classList.contains('intro-scroll-lock')) return;
 
     const marker = window.scrollY + (window.innerHeight * 0.35);
     let active = sectionEls[0].id;
@@ -82,11 +154,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // ================= 3. THEME TOGGLE =================
   const themeToggles = document.querySelectorAll('.theme-toggle');
   
-  // Check for saved theme preference
+  // Check for saved theme preference or use system preference
   const savedTheme = localStorage.getItem('theme');
+  const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
   
-  // Default to dark mode unless the user explicitly saved 'light' previously
-  if (savedTheme === 'light') {
+  if (savedTheme === 'light' || (!savedTheme && systemPrefersLight)) {
     document.documentElement.setAttribute('data-theme', 'light');
   } else {
     document.documentElement.setAttribute('data-theme', 'dark');
