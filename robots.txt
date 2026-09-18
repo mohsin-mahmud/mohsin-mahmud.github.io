@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mohsin-mahmud.github.io/sitemap.xml
